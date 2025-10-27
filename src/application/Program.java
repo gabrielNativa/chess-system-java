@@ -1,4 +1,3 @@
-
 package application;
 
 import java.util.InputMismatchException;
@@ -11,33 +10,36 @@ import chess.ChessPosition;
 
 public class Program {
 
-	public static void  main(String[] args) {
-		Scanner ler = new Scanner(System.in);
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
 		ChessMatch chessMatch = new ChessMatch();
 		
-		while(true) {
-			
+		while (true) {
 			try {
 				UI.clearScreen();
-				UI.printBoard(chessMatch.getPieces());
+				UI.printMatch(chessMatch);
 				System.out.println();
 				System.out.print("Source: ");
-				ChessPosition source = UI.readChessPosition(ler);
+				ChessPosition source = UI.readChessPosition(sc);
+				
+				boolean[][] possibleMoves = chessMatch.possibleMoves(source);
+				UI.clearScreen();
+				UI.printBoard(chessMatch.getPieces(), possibleMoves);
 				System.out.println();
 				System.out.print("Target: ");
-				ChessPosition target = UI.readChessPosition(ler);
+				ChessPosition target = UI.readChessPosition(sc);
 				
-				ChessPiece capturePiece= chessMatch.performChessMovie(source, target);
+				ChessPiece capturedPiece = chessMatch.performChessMove(source, target);
 			}
-			catch(ChessException e) {
+			catch (ChessException e) {
 				System.out.println(e.getMessage());
-				ler.nextLine();
+				sc.nextLine();
 			}
-			catch(InputMismatchException e) {
+			catch (InputMismatchException e) {
 				System.out.println(e.getMessage());
-				ler.nextLine();
+				sc.nextLine();
 			}
-			}
-		
+		}
 	}
 }
